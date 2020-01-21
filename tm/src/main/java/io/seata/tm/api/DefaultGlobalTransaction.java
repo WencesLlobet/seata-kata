@@ -122,18 +122,7 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
         }
         int retry = COMMIT_RETRY_COUNT;
         try {
-            while (retry > 0) {
-                try {
-                    status = transactionManager.commit(xid);
-                    break;
-                } catch (Throwable ex) {
-                    LOGGER.error("Failed to report global commit [{}],Retry Countdown: {}, reason: {}", this.getXid(), retry, ex.getMessage());
-                    retry--;
-                    if (retry == 0) {
-                        throw new TransactionException("Failed to report global commit", ex);
-                    }
-                }
-            }
+            status = transactionManager.commit(xid);
         } finally {
             if (RootContext.getXID() != null) {
                 if (xid.equals(RootContext.getXID())) {
@@ -162,18 +151,7 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
 
         int retry = ROLLBACK_RETRY_COUNT;
         try {
-            while (retry > 0) {
-                try {
-                    status = transactionManager.rollback(xid);
-                    break;
-                } catch (Throwable ex) {
-                    LOGGER.error("Failed to report global rollback [{}],Retry Countdown: {}, reason: {}", this.getXid(), retry, ex.getMessage());
-                    retry--;
-                    if (retry == 0) {
-                        throw new TransactionException("Failed to report global rollback", ex);
-                    }
-                }
-            }
+            status = transactionManager.rollback(xid);
         } finally {
             if (RootContext.getXID() != null) {
                 if (xid.equals(RootContext.getXID())) {
