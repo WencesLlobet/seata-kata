@@ -27,4 +27,20 @@ class DefaultGlobalTransactionShould {
 
     verify(transactionManager,times(3)).commit("");
   }
+
+  @Test
+  void should_stop_repeating_attempts_and_throw_when_limit_is_reached() throws TransactionException {
+    DefaultGlobalTransaction defaultGlobalTransaction = new DefaultGlobalTransaction("",null,null, transactionManager);
+    when(transactionManager.commit(""))
+        .thenThrow(new TransactionException(""));
+
+    try {
+      defaultGlobalTransaction.commit();
+    }catch (TransactionException e){
+      verify(transactionManager,times(4)).commit("");
+      return;
+    }
+
+    fail();
+  }
 }
