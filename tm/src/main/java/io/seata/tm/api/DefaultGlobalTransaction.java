@@ -132,11 +132,7 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
             try {
                 status = transactionManager.commit(xid);
             } catch (TransactionException e) {
-                try {
-                    status = transactionManager.commit(xid);
-                } catch (TransactionException f){
-                    status = transactionManager.commit(xid);
-                }
+                tryCommit();
             }
         } finally {
             if (RootContext.getXID() != null) {
@@ -149,6 +145,14 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
             LOGGER.info("[" + xid + "] commit status:" + status);
         }
 
+    }
+
+    private void tryCommit() throws TransactionException {
+        try {
+            status = transactionManager.commit(xid);
+        } catch (TransactionException f) {
+            status = transactionManager.commit(xid);
+        }
     }
 
     @Override
