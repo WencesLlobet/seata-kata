@@ -20,10 +20,11 @@ class DefaultGlobalTransactionShould {
     DefaultGlobalTransaction defaultGlobalTransaction = new DefaultGlobalTransaction("",null,null, transactionManager);
     when(transactionManager.commit(""))
         .thenThrow(new TransactionException(""))
+        .thenThrow(new TransactionException(""))
         .thenReturn(GlobalStatus.Committed);
 
     defaultGlobalTransaction.commit(); 
 
-    verify(transactionManager,times(2)).commit("");
+    verify(transactionManager,times(3)).commit("");
   }
 }
