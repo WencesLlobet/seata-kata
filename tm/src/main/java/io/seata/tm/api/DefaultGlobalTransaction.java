@@ -74,6 +74,13 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
         this.role = role;
     }
 
+    DefaultGlobalTransaction(String xid, GlobalStatus status, GlobalTransactionRole role, TransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
+        this.xid = xid;
+        this.status = status;
+        this.role = role;
+    }
+
     @Override
     public void begin() throws TransactionException {
         begin(DEFAULT_GLOBAL_TX_TIMEOUT);
@@ -120,7 +127,7 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
         if (xid == null) {
             throw new IllegalStateException();
         }
-        int retry = COMMIT_RETRY_COUNT;
+        int retry = 4;
         try {
             status = transactionManager.commit(xid);
         } finally {
