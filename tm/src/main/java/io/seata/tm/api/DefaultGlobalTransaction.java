@@ -129,7 +129,11 @@ public class DefaultGlobalTransaction implements GlobalTransaction {
         }
         int retry = 4;
         try {
-            status = transactionManager.commit(xid);
+            try {
+                status = transactionManager.commit(xid);
+            } catch (TransactionException e) {
+                status = transactionManager.commit(xid);
+            }
         } finally {
             if (RootContext.getXID() != null) {
                 if (xid.equals(RootContext.getXID())) {

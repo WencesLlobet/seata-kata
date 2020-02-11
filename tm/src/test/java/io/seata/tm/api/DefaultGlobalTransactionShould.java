@@ -22,7 +22,7 @@ class DefaultGlobalTransactionShould {
         .thenThrow(new TransactionException(""))
         .thenReturn(GlobalStatus.Committed);
 
-    defaultGlobalTransaction.commit();
+    defaultGlobalTransaction.commit(); 
 
     verify(transactionManager,times(2)).commit("");
   }
